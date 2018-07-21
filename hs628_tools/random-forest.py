@@ -1,28 +1,38 @@
 import pandas as pd
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.datasets import make_classification
-from sklearn import preprocessing
 
-### Let the user decide between randomforest classifier or regressor. Return tuple of predictions and scores.
-def rf(features, target, model=classifier):
+
+def rf(data, features, target, model='classifier'):
+    train_features, train_target, test_features, test_target = train_test_split(features, target, test_size=0.25, random_state=13)
     if model == 'classifier':
-        features['train'] = np.random.uniform(0, 1, len(data)) <= 0.75
-        train_features, test_features = features[features['train']==True], features[features['train']==False]
-        train_target, test_target = target[target['train']==True], target[target['train']==False]
-
-        clf = RandomForestClassifier(n_jobs=2, random_state=0)
+        clf = RandomForestClassifier(n_estimators=10, criterion='gini', max_features='auto',
+                                     n_jobs=1, random_state=13, class_weight='balanced')
         clf.fit(train_features, train_target)
         clf.predict(test_features)
-
-        # Fix this indexing, does it even work?!
-        predictions = test_features[clf.predict(test_features)]
+        predictions = clf.predict(test_target)
         scores = list(zip(train_features, clf.feature_importances_))
 
         return predictions, scores
     elif model == 'regressor':
-        pass
+        rf = RandomForestRegressor(n_estimators=20, max_features='auto')
+        tf.fit(train_features, train_target)
+        predictions = rf.predict(test_target)
+        scores = list(zip(train_features, clf.feature_importances_))
 
+        return predictions, scores
+
+
+
+
+
+
+
+
+
+### MAIN ###
 if __name__ == '__main__':
 
-    pass
+    data = pd.read_csv('data.csv')
