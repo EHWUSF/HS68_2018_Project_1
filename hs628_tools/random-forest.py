@@ -1,8 +1,8 @@
-import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 
-def rf(data, features, target, model='classifier'):
+def rf(features, target, model='classifier'):
     train_features, train_target, test_features, test_target = train_test_split(features, target, test_size=0.25, random_state=13)
     if model == 'classifier':
         clf = RandomForestClassifier(n_estimators=10, criterion='gini', max_features='auto',
@@ -27,4 +27,4 @@ def rf(data, features, target, model='classifier'):
 ### MAIN ###
 if __name__ == '__main__':
 
-    data = pd.read_csv('data.csv')
+    pass
