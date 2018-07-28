@@ -1,110 +1,74 @@
-
 # coding: utf-8
-
-# In[1]:
 
 
 import numpy as np
+import pandas as pd
 import sklearn as sk
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
-#%config IPCompleter.greedy=True
+import seaborn as sns
+
+
+# %config IPCompleter.greedy=True
 
 
 # ************************ Part 1 - Data Visualization to check Linear regression assumptions ******************
 
-# In[ ]:
-
-
-class reg_check:
-    
-    def __init__(self, X, y, model):
-        self.data = X
-        self.target = y
-        self.model = model
+class RegCheck():
+    def __init__(self):
+        self.data = None
+        self.target = None
+        self.model = None
         ## degrees of freedom population dep. variable variance
-        self._dft = X.shape[0] - 1   
+        self._dft = None
         ## degrees of freedom population error variance
-        self._dfe = X.shape[0] - X.shape[1] - 1  
+        self._dfe = None
 
-
-# In[ ]:
-
-
-    def check_linearity_plt(X,y,linear):
-
-        # Plot of Residuals vs individual independent variables(predictors).
-        for i in len(X):
-            Y_pred = linear.predict(X)
-            residual = y-Y_pred
-            plt.scatter(,residual)
-            plt.xlabel("X1 - a predictor")
-            plt.ylabel("residual")
-            plt.show()
-
-            fig, axes = plt.subplots(1, 1, sharex=False, sharey=False)
-            fig.suptitle('[Residual Plots]')
-
-            axes[i].axhline(y=0, color='k')
-            axes[i].grid()
-            axes[i].set_title('Linear')
-            axes[i].set_xlabel('predicted values')
-            axes[i].set_ylabel('residuals')
-
-
+    def check_linearity_residual_homoscedasticity_independence_plt(self, X, y, linear):
         # Plot of Residuals vs predicted values
         fig, axes = plt.subplots(1, 1, sharex=False, sharey=False)
         fig.suptitle('[Residual Plots]')
-        fig.set_size_inches(12,5)
-        axes[0].plot(linear.predict(X), y-linear.predict(X), 'bo')
-        axes[0].axhline(y=0, color='k')
-        axes[0].grid()
-        axes[0].set_title('Linear')
-        axes[0].set_xlabel('predicted values')
-        axes[0].set_ylabel('residuals')
+        fig.set_size_inches(12, 5)
+        axes.plot(linear.predict(X), y - linear.predict(X), 'bo--')
+        axes.axhline(y=0, color='k')
+        axes.grid()
+        axes.set_title('Linear/Non-Linear')
+        axes.set_xlabel('predicted values')
+        axes.set_ylabel('residuals')
+        plt.show()
+
+    def check_residuals_normality_plt(self, X, y, linear):
+        residuals = y - linear.predict(X)
+        sns.distplot(residuals)
+        plt.xlabel("Residuals")
+        plt.title('Residual Normality Check')
+        plt.show()
+
+    def check_predictors_independence_plt(self, X, y, linear, names):
+        data_df = pd.DataFrame(X, columns=names)
+        sns.heatmap(data_df.corr(), cmap='binary', annot=True)
+        plt.suptitle('Heatmap of Correlations')
+        plt.show()
 
 
+if __name__ == '__main__':
+    # Call the check_assumptions function to print all the plots and check for linear regression assumptions
+    data_load = np.genfromtxt('data.csv', delimiter=",", dtype=float, names=True)
+    data = data_load.view(np.float64).reshape(data_load.shape + (-1,))
+    names = list(data_load.dtype.names)
+    predictor_names = names[:len(names) - 1]
 
+    datax = data[:, :-1]  # a 2-d array of all predictor variables
+    datay = data[:, -1]  # a 1-d array of response variable
 
+    lr = LinearRegression()
+    lr.fit(datax, datay)
 
-# In[ ]:
+    reg = RegCheck()
 
-
-    def check_predictors_independence_plt(X,y,linear):
-
-
-
-# In[ ]:
-
-
-    def check_residuals_independence_plt(X,y,linear):
-
-
-
-# In[ ]:
-
-
-    def check_residuals_normality_plt(X,y,linear):
-
-
-
-# In[ ]:
-
-
-    def check_residuals_homoscedasticity_plt(X,y,linear):
-
-
-# In[ ]:
-
-
-    def check_regression_assumptions(X,y):
-        # Call all the above 5 functions
-
-
-# In[ ]:
-
-
-# Call the check_assumptions function to print all the plots and check for linear regression assumptions
+    # reg.check_linearity_plt(datax,datay,lr)
+    # reg.check_linearity_residual_homoscedasticity_independence_plt(datax,datay,lr)
+    # reg.check_predictors_independence_plt(datax,datay,lr,predictor_names)
 
 
 # ****************** Part 2 - Calculate new metric to report the model ****************
