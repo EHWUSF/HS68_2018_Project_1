@@ -9,8 +9,33 @@ import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
 
+def main():
+    printIntro()
+    df1, col, col_cat = getInputs()
+    listgrp=coltuple(df1,col,col_cat)# helper function
+    colgroupbyclass=group_by(listgrp,1) # helper function
+    print(summarystat(colgroupbyclass))
 
-df1 = pd.read_csv("C:/Users/Nitie/Desktop/health_informatics/MSHI_CLASSES/summer_2018/650/project data/parkinsons_train_set.csv")
+def printIntro():
+               Print("The purpose of this program is to visualize some descriptive statistics grouped by column")
+
+def getInputs() :
+        """
+           Build a tuple from the column and class label
+            -----------
+            Parameters:
+            Prompt User for name categorical column
+            User input for name of target column
+            Prompt user for data frame
+            -----------
+            Returns:
+            Variables representing categorical column,target column and dataframe
+        """
+               #Returns the three input parameters
+               col_cat=(input("what is col_cat name ?"))
+               col=float(input("what is the col name ?"))
+               df1 = pd.read_csv("C:/Users/Nitie/Desktop/health_informatics/MSHI_CLASSES/summer_2018/650/project data/parkinsons_train_set.csv")
+               return col_cat,col,df1
 
 #Function 1: Build a tuple of the column and class label
 """
@@ -36,10 +61,10 @@ def coltuple(df,col,typpe):
         print (newtuple)
     return newtuple
 
+
 #Test the tuple generator
-listgrp=coltuple(df1,'HNR','status')
-
-
+#df1 = pd.read_csv("C:/Users/Nitie/Desktop/health_informatics/MSHI_CLASSES/summer_2018/650/project data/parkinsons_train_set.csv")
+#listgrp=coltuple(df1,'HNR','status')
 # Function 2:Build the groupby function
     """
           Build the groupby function -(merge into  dictionary with value and key) 
@@ -53,7 +78,7 @@ listgrp=coltuple(df1,'HNR','status')
                 A merged dictionary comprising of elements grouped by the keys.
         """
 
-def group_by(tpls,idx=0,merge=True):
+def group_by(tpls,idx=1,merge=True):
     d = dict()
     for tpl in tpls:
         k = tpl[idx]
@@ -62,10 +87,7 @@ def group_by(tpls,idx=0,merge=True):
     return d
 
 # Test the groupby function
-colgroupbyclass=group_by(listgrp,1)
-
-
-
+#colgroupbyclass=group_by(listgrp)
 # Function 3:Build probability density function normalized histogram for the groups
     """
           Build probability density function normalized for the groups
@@ -92,5 +114,14 @@ def summarystat(listd):
     return avg,median,stdev
 
 # Call the groupby function and apply the arguments
-summarystat(colgroupbyclass)
+#summarystat(colgroupbyclass)
+#summarystat(d)
 
+if __name__ == "__main__": main()
+
+
+           
+
+
+
+    
