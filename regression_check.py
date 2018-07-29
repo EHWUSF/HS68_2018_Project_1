@@ -7,11 +7,10 @@ from sklearn.linear_model import LinearRegression
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import seaborn as sns
-
-
+import os
+import sys
 # %config IPCompleter.greedy=True
 # %matplotlib inline
-
 
 #   ****** Data Visualization to check Linear regression assumptions and calculating new regression metric ******
 
@@ -154,10 +153,17 @@ class RegCheck():
 
         return self.regmetric
 
-
 if __name__ == '__main__':
+
+    # Taking the input file as a command line argument
+    fn = sys.argv[1]
+    # Checking if the file exists in the path if exists getting the absolute path
+    if os.path.exists(fn):
+        filepath = os.path.abspath(sys.argv[1])
+    else:
+        raise ValueError("Input file name not found")
     # Loading the sample data to build and test the model
-    data_load = np.genfromtxt('data.csv', delimiter=",", dtype=float, names=True)
+    data_load = np.genfromtxt(filepath, delimiter=",", dtype=float, names=True)
     # Converting the structured array into a normal numpy array
     data = data_load.view(np.float64).reshape(data_load.shape + (-1,))
     # Extract the Column names of the predictors
