@@ -34,14 +34,11 @@ class Outliers:
         self.data = data
 
         if data is None:
-            with open("mydata.csv") as f:
-                reader = csv.reader(f)  ##load data.csv
-                next(reader)
-                self.data = [r for r in reader]
-                for i in range(len(self.data)):  ##remove None in data.csv
-                    self.data[i] = [elem for elem in self.data[i] if elem.isnumeric()]
-                self.data = np.array(self.data, dtype=np.float)  # convert to float
-                print(self.data)
+            self.data = [r for r in reader]
+            for i in range(len(self.data)):  ##remove None in data.csv
+                self.data[i] = [elem for elem in self.data[i] if elem.isnumeric()]
+            self.data = np.array(self.data, dtype=np.float)  # convert to float
+            print(self.data)
 
     ##
     def cal_outliers(self):
