@@ -12,6 +12,9 @@ class Outliers:
 
     Returns:
     outliers
+
+    *Note:
+    Assumed the data set('data.csv') is loaded
     """
 
     def __init__(self, mean=0, std=1, data=None):  # default values input for mean and std
