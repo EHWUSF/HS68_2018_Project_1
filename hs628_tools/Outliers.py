@@ -13,7 +13,7 @@ class Outliers:
     outliers
     """
 
-    def __init__(self, mean=0, std=1, data=None): ##default values input for mean and std
+    def __init__(self, mean=0, std=1, mydata=None): ##default values input for mean and std
         """
         Actions:
         (0) Define parameters
@@ -21,7 +21,7 @@ class Outliers:
         (2) Clean data by removing none numeric values("None", "Norm", and etc.)
         (3) Convert values from string to float
 
-        Unit tests:
+        Unit tests to confirm data cleaning
           >>> "6".isnumeric()
           True
           >>> "None".isnumeric()
@@ -31,15 +31,13 @@ class Outliers:
         """
         self.mean = mean
         self.std = std
-        self.data = data
+        self.mydata = mydata
 
         if data is None:
-            self.data = [r for r in reader]
-            for i in range(len(self.data)):  ##remove None in data.csv
-                self.data[i] = [elem for elem in self.data[i] if elem.isnumeric()]
-            self.data = np.array(self.data, dtype=np.float)  # convert to float
-            print(self.data)
-
+            for i in range(len(self.mydata)):  ##remove None in data.csv
+                self.data[i] = [elem for elem in self.mydata[i] if elem.isnumeric()]
+            self.mydata = np.array(self.mydata, dtype=np.float)  # convert to float
+            print(self.mydata)
     ##
     def cal_outliers(self):
         """
@@ -50,11 +48,11 @@ class Outliers:
         (1) mean: mean of the list of list
         (2) std: standard diviation of the list
         """
-        mean = sum(self.data) / (len(self.data))
-        for i in range(0, len(self.data)):
-            sum_diff = sum((self.data[i] - mean)) ** 2
-            std = sum_diff ** 0.5
-        outliers = [self.data[i] for i in range(0, len(self.data)) if abs(sum_diff) > 1.96 * std]
+        self.mean = sum(self.mydata) / (len(self.mydata))
+        for i in range(0, len(self.mydata)):
+            sum_diff = sum((self.mydata[i] - self.mean)) ** 2
+            self.std = sum_diff ** 0.5
+        outliers = [self.mydata[i] for i in range(0, len(self.mydata)) if abs(sum_diff) > 1.96 * self.std]
         return outliers
 
 if __name__ == '__main__':
