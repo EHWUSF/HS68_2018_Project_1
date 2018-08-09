@@ -16,7 +16,11 @@ import sys
 
 class RegCheck():
     """
-        This Class is created for checking Linear Regression assumptions and Evaluating the Model
+        This Class is created for checking Linear Regression assumptions and Evaluating the Model.
+        Some of the ideas and concepts for linear regression check are adapted from :
+        https://github.com/dziganto/Data_Science_Fundamentals/blob/master/notebooks/Machine_Learning/
+        Supervised_Learning/Regression/Linear_Regression/3_Linear_Regression_Assumptions_and_Evaluation.ipynb
+
         The following functions are defined in this class :
 
          func : check_linearity_residual_homoscedasticity_independence_plt checks to see if the
@@ -51,23 +55,21 @@ class RegCheck():
 
     def check_linearity_residual_homoscedasticity_independence_plt(self, X, y, model):
         """
-        Checks to see if the data can fit to a linear model/non-linear model,checks the homoscedasticity
+        Plots the data fitted to a linear model/non-linear model and helps user in checking the homoscedasticity
          of the residuals/error terms and also checks for their independence.
             -----------
             Param:
                 X: 2-D numpy array of the predictors
                 y: 1-D numpy array of the response variables
-                linear : Linear regression model fitted to X(predictors) and y(response)
+                model : Linear regression model fitted to X(predictors) and y(response)
             -----------
             Return:
                 Doesn't return anything, just shows the plot object built
         """
 
-        # Plot of Residuals vs predicted values
+        # Plot of Residuals vs predicted values from the linear model
         fig, axes = plt.subplots(1, 1, sharex=False, sharey=False)
-        fig.suptitle('[Residual Plots]')
-        fig.set_size_inches(12, 5)
-        # plotting the predicted values from the linear model vs the error values
+        fig.suptitle('Residual Plots')
         axes.plot(model.predict(X), y - model.predict(X), 'bo--')
         axes.axhline(y=0, color='k')
         axes.grid()
@@ -78,12 +80,13 @@ class RegCheck():
 
     def check_residuals_normality_plt(self, X, y, model):
         """
-        Checks to see the normality of the error terms through a density plot of the residuals
+        Plots the data fitted to a linear model/non-linear model and helps user in checking
+        the normality of the error terms through a density plot of the residuals
             -----------
             Param:
                 X: 2-D numpy array of the predictors
                 y: 1-D numpy array of the response variables
-                linear : Linear regression model fitted to X(predictors) and y(response)
+                model : Linear regression model fitted to X(predictors) and y(response)
             -----------
             Return:
                 Doesn't return anything, just shows the plot object built
@@ -98,7 +101,8 @@ class RegCheck():
 
     def check_predictors_independence_plt(self, X, y, colnames):
         """
-        Checks to see the independence of the predictors by plotting a heatmap of the correlations
+        Plots the data fitted to a linear model/non-linear model and helps user in checking
+        the independence of the predictors by plotting a heatmap of the correlations
             -----------
             Param:
                 X: 2-D numpy array of the predictors
@@ -109,10 +113,10 @@ class RegCheck():
                 Doesn't return anything, just shows the plot object built
         """
         self.colnames = colnames
-        data_df = pd.DataFrame(X, columns=self.colnames)
+        corr_matrix = np.corrcoef(X, rowvar=False)
 
         # Heatmap of the correlation matrix
-        sns.heatmap(data_df.corr(), cmap='binary', annot=True)
+        sns.heatmap(corr_matrix, xticklabels=self.colnames, yticklabels=self.colnames, cmap='binary', annot=True)
         plt.suptitle('Heatmap of Correlations')
         plt.show()
 
@@ -120,7 +124,7 @@ class RegCheck():
         """
         Calculates a new regression_metric for evaluating the model. R-Squared,F-Statistic,
         Residual Standard error are used from the summary of the model to calculate this metric.
-        Intuitively The RSE represents the average distance of the observed data from the model
+        Intiuitively The RSE represents the average distance of the observed data from the model
         thus the lower the RSE the better fit and F-value expresses how much of the model has improved
         (compared to the mean) given the inaccuracy of the model and R-squared.R2 expresses how much
         of the total variation in the data can be explained by the mode(the regression line).
@@ -153,15 +157,22 @@ class RegCheck():
 
         return self.regmetric
 
+
 if __name__ == '__main__':
 
-    # Taking the input file as a command line argument
-    fn = sys.argv[1]
+    # Taking the input file as a command line argument and checking the number of arguments : 2
+    # (as script name is also considered as an argument)
+    if len(sys.argv) == 2:
+        fn = sys.argv[1]
+    else:
+        sys.exit('Filename not passed as an argument please check')
+
     # Checking if the file exists in the path if exists getting the absolute path
     if os.path.exists(fn):
-        filepath = os.path.abspath(sys.argv[1])
+        filepath = os.path.abspath(fn)
     else:
         raise ValueError("Input file name not found")
+
     # Loading the sample data to build and test the model
     data_load = np.genfromtxt(filepath, delimiter=",", dtype=float, names=True)
     # Converting the structured array into a normal numpy array
