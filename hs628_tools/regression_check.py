@@ -56,7 +56,8 @@ class RegCheck():
     def check_linearity_residual_homoscedasticity_independence_plt(self, X, y, model):
         """
         Plots the data fitted to a linear model/non-linear model and helps user in checking the homoscedasticity
-         of the residuals/error terms and also checks for their independence.
+         of the residuals/error terms and also checks for their independence.This method has a predict method
+         from scikit learn applied on the model to predict the values
             -----------
             Param:
                 X: 2-D numpy array of the predictors
