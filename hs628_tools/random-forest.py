@@ -7,9 +7,9 @@ def rf(features, target, model='classifier'):
     """Function to combine sklearn's randomforestclassifier and randomforestregressor methods
 
         Args:
-            param1 (pandas dataframe): pd dataframe of feature or predictor variables
-            param2 (pandas dataframe): pd dataframe of target or response variables
-            param3 (str) : User chosen method, be it classifier or regressor. Default set to 'classifier'.
+            features (pandas dataframe or np array): pd dataframe or np array of feature or predictor variables
+            target (pandas dataframe or np array): pd dataframe or np array of target or response variables
+            model (str) : User chosen method, be it classifier or regressor. Default set to 'classifier'.
 
         Returns:
             list: list of feature importances
