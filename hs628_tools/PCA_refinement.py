@@ -46,30 +46,37 @@ def correlation_plot(X, Y):
     plt.colorbar()
     plt.show()
 
-def specified_scaling (df, names):
+def specified_scaling (X, selected_fts):
     """ This function scales specific variables in the dataframe
          Args: 
-            df: dataframe to be scaled
-            names: list of the variables which need scaling, names can be the list returned from correlated_variables()
+            X: numpy array with independent variables
+            selected_fts: index of feature columns, can be the list returned from correlated_variables()
         Returned: 
             df: Dataframe with the specificed variables scaled
     """
     standardscaling = StandardScaler()
-    df[names] = standardscaling.fit_transform(df[names])
-    return df
+    for i in selected_fts:
+        X[:,i] = standardscaling.fit_transform(X[:,i])
+    return X
     
-def specified_PCA (df, names, num_components):
+def specified_PCA (X, components):
     """ This function performs PCA on selected variables
         Args: 
-            df: dataframe which has the variables which need PCA performed
-            names: list of the variables which need PCA
+            X: numpy array which has the variables which need PCA performed
+            components: list of index of the variables which need PCA, can be the list returned from correlated_variables()
+            
         Returned: 
-            finalDf: dataframe with PCA performed on selected variables
+            finalX: numpy array with PCA performed on selected variables
     """
-    pca = PCA(n_components= num_components)
-    principalComponents = pca.fit_transform(df[names])
-    principalDf = pd.DataFrame(data = principalComponents)
-    finalDf = pd.concat([principalDf, df[-[names]]], axis = 1)
-    return finalDf
+    num_components = len(components)
+    principalComponents = []
+    for i in components: 
+        principalComponents = np.concatenate ((principalComponents, (X[:,i]).T),axis = 1)
+    pca = PCA(n_components = num_components)
+    principalComponents = pca.fit_transform(principalComponents)
+    for i in np.size(X,1)-1: 
+        if i not in components: 
+            principalComponents = np.concatenate ((principalComponents, (X[:,i]).T),axis = 1)
+    return principalComponents
 
 ##main##
