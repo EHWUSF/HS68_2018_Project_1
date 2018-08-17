@@ -1,66 +1,74 @@
-import pylab
+# -*- coding: utf-8 -*-
+# Python version 3.6
+
+import re
 import numpy as np
+import csv
+
+from numpy import NaN
 
 
 class Outliers:
     """
     Concept:
     Returns list of data(list array) which fall outside of two standard deviations under the normal distribution curve.
-
     Parameters:
     mean, standard deviation(std)
-
     Returns:
     outliers
-
-    *Note:
-    Assumed the data set('data.csv') is loaded
     """
 
-    def __init__(self, mean=0, std=1, data=None):  # default values input for mean and std
+    def __init__(self):  # default values input for mean and std
         """
         Actions:
         (0) Define parameters
-        (1) Load data
         (2) Clean data by removing none numeric values("None", "Norm", and etc.)
         (3) Convert values from string to float
-
         Unit tests to confirm data cleaning:
           >>> "6".isnumeric()
           True
-          >>> "None".isnumeric()
-          False
-          >>> "Norm".isnumeric()
+          >>> "None", "Norm".isnumeric()
           False
         """
         self.mean = mean
         self.std = std
         self.data = data
 
-        if data is None:
-            for i in range(len(self.data)):  # remove None in data.csv
-                self.data[i] = [elem for elem in self.data[i] if elem.isnumeric()]
-            self.data = np.array(self.data, dtype=np.float)  # convert to float
-            print(self.data)
-    ##
-    def cal_outliers(my_arr, out_lim):
+
+    def clean(self, pattern):
+        pat1 = bool(re.match(pattern='\d{}-\d{}', string='123-4560'))
+        pat2 = bool(re.match(pattern='\$\d*\.\d{}', string='$123.45'))
+        pat3 = bool(re.match(pattern='[A-Z]\w*', string='Australia'))
+        if bool(pattern.match(pat1, pat2, pat3)):
+            return(NaN)
+        else:
+            pass
+
+        for i in range(len(self.data)):
+            self.data[i] = [elem for elem in self.data[i] if elem.isnumeric()]
+        self.data = np.array(self.data, dtype=np.float)  # convert to float
+        print(self.data)
+
+
+    def calc_outliers(self, my_arr, out_lim):
         """
         Concept:
-        Function for calculating values out of scope of two standard deviation in data and returning those values as
-        outliers
-
+            Function for calculating samples out of scope of two standard deviation in data and returning those collection
+            of samples as outliers
+        Parameters:
+            my_arr:
+            out_lim:
         Actions:
-        Get quartile values for outlier limits: out of two standard deviation
-
+            Get quartile values for outlier limits: out of two standard deviation
         References:
-        - Anomaly detection in Python at Lynda.com
-          (https://www.lynda.com/Business-Intelligence-tutorials/Anomaly-detection-Python/475936/529731-4.html)
-        - A Bayesian Anomaly Detection Framework for Python
-          (pyISC: A Bayesian Anomaly Detection Framework for Python;
-                 Proceedings of the Thirtieth International Florida Artificial Intelligence Research Society Conference)
+            - Anomaly detection in Python at Lynda.com
+              (https://www.lynda.com/Business-Intelligence-tutorials/Anomaly-detection-Python/475936/529731-4.html)
+            - A Bayesian Anomaly Detection Framework for Python
+              (pyISC: A Bayesian Anomaly Detection Framework for Python;
+              Proceedings of the Thirtieth International Florida Artificial Intelligence Research Society Conference)
         """
         my_arr = np.random.randn(20, 10)  # data array
-        out_lim = np.selp.std*1.96  # set outlier limit
+        out_lim = np.self.std*1.96  # set outlier limit
         outliers = np.ones((my_arr.shape[0],), dtype=np.bool)
         self.mean = np.self.mean(my_arr, axis=0)
         self.std = np.self.std(my_arr, axis=0, drop=1)
@@ -70,7 +78,15 @@ class Outliers:
         return my_arr[outliers]
 
 
+    def main(self, data):
+        with open("data.csv") as f:
+            reader = csv.reader(f)
+            next(reader)
+            data = [r for r in reader]
+
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
+
 
