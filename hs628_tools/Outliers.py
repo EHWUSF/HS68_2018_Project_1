@@ -1,26 +1,22 @@
 # -*- coding: utf-8 -*-
 # Python version 3.6
 
-import re
 import numpy as np
 import csv
-
-from numpy import NaN
 
 
 class Outliers:
     """
+    * Note:
+      This class is written for Python version 3.6.
+    -------------------------------------------------------------------------------------------------------------------
     Concept:
-    Returns list of data(list of array) which fall outside of two standard deviations under the normal distribution curve.
-    Parameters:
-    mean, standard deviation(std)
+    Filter out samples which fall outside of two standard deviations under the normal distribution curve.
     Returns:
-    outliers
-    *Note:
-    This class is written for Python version 3.6.
+    List of samples collected as outliers
     """
 
-    def __init__(self):  # default values input for mean and std
+    def __init__(self):
         self.mean = None
         self.std = None
         self.data = None
@@ -28,14 +24,11 @@ class Outliers:
 
     def calc_outliers(self, my_arr, outlier_limit=2):
         """
-        Concept:
-            Function for calculating samples out of scope of two standard deviation in data and returning those collection
-            of samples as outliers
+        - The purpose of this function is to calculate samples out of scope of two standard deviation in data, which is
+          the range of outliers, and to return those collected samples as outliers
         Parameters:
-            my_arr:
-            outlier_limit: the number of standard diviations outside of which data points considered outliers
-        Actions:
-            Get quartile values for outlier limits: out of two standard deviation
+            my_arr: the list of numpy arrays which is returned from outside function of "read_testdata".
+            outlier_limit: the number of standard deviations outside of which data points considered outliers
         References:
             - Anomaly detection in Python at Lynda.com
               (https://www.lynda.com/Business-Intelligence-tutorials/Anomaly-detection-Python/475936/529731-4.html)
@@ -52,9 +45,16 @@ class Outliers:
         return my_arr[outliers]
 
 
-def read_testdata(): #'main' function should be out of 'Class'; should be other name to in it
-    with open("mydata.csv") as f:
-        # data.csv download link: https: // usf - mshi.slack.com / files / U6TC6KH0X / FBRM98U8G / data.csv
+def read_testdata():
+    """
+    - The purpose of this function is to read data set.
+    - The function is added code lines converting data to numpy array, and data type from 'string' to 'float'.
+    ----------------------------------------------------------------------------------------------------------------
+    * Note that "data.csv" used in this project is the version the "A1Cresult" column is removed from the original
+                "data.csv" file. The file can be downloaded through the link,
+                "https: // usf - mshi.slack.com / files / U6TC6KH0X / FBRM98U8G / data.csv"
+    """
+    with open("data.csv") as f:
         reader = csv.reader(f)
         next(reader)
         data = [r for r in reader]
