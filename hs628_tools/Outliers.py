@@ -39,7 +39,7 @@ class Outliers:
         self.mean = my_arr.mean(axis=0)
         self.std = my_arr.std(axis=0)
         outliers = np.ones((my_arr.shape[0],), dtype=np.bool)
-        for i in range(len(my_arr.shape)):  # added for detect outliers by each column
+        for i in range(len(my_arr.shape)):
             col = my_arr[:, i]
             outliers[outliers] &= np.abs((col[outliers] - self.mean[i]) / self.std[i]) < outlier_limit
         return my_arr[outliers]
