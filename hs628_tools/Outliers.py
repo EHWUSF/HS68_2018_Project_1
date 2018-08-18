@@ -11,28 +11,19 @@ from numpy import NaN
 class Outliers:
     """
     Concept:
-    Returns list of data(list array) which fall outside of two standard deviations under the normal distribution curve.
+    Returns list of data(list of array) which fall outside of two standard deviations under the normal distribution curve.
     Parameters:
     mean, standard deviation(std)
     Returns:
     outliers
+    *Note:
+    This class is written for Python version 3.6.
     """
 
     def __init__(self):  # default values input for mean and std
-        """
-        Actions:
-        (0) Define parameters
-        (2) Clean data by removing none numeric values("None", "Norm", and etc.)
-        (3) Convert values from string to float
-        Unit tests to confirm data cleaning:
-          >>> "6".isnumeric()
-          True
-          >>> "None", "Norm".isnumeric()
-          False
-        """
-        self.mean = mean
-        self.std = std
-        self.data = data
+        self.mean = None
+        self.std = None
+        self.data = None
 
 
     def clean(self, pattern):
@@ -78,15 +69,24 @@ class Outliers:
         return my_arr[outliers]
 
 
-    def main(self, data):
-        with open("data.csv") as f:
-            reader = csv.reader(f)
-            next(reader)
-            data = [r for r in reader]
+def read_testdata(): #'main' function should be out of 'Class'; should be other name to in it
+    with open("mydata.csv") as f:
+        # data.csv download link: https: // usf - mshi.slack.com / files / U6TC6KH0X / FBRM98U8G / data.csv
+        reader = csv.reader(f)
+        next(reader)
+        data = [r for r in reader]
+    conversion = np.array(data).astype("f4")
+    return conversion
 
 
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
+    result = read_testdata()
+
+
+
+    #converted_data.astype("f4")
+
 
 
